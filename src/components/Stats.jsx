@@ -55,22 +55,31 @@ export default function Stats({ jsonData }) {
   return (
   <div>
     <h2>Stats</h2>
-    <h3>Deck</h3>
-    <p>Total future = {totalFuture || 0}</p>
-    <p>Total due = {totalDue || 0}</p>
-    <p>Total currently learning = {totalLearning || 0}</p>
-    <p>Total mastered = {totalMastered || 0}</p>
-    <hr />
-    <h3>Cards Today</h3>
-    <p>Total cards today = {dailyTotalCards || 0}</p>
-    <p>Total correct today = {dailyCorrectCards || 0}</p>
-    <p>Total incorrect today = {dailyIncorrectCards || 0}</p>
-    <p>Total new today = {dailyNewCards || 0}</p>
-    <p>Total reviewed today = {dailyReviewCards || 0}</p>
-    <hr />
-    <h3>Pronunciation today</h3>
-    <p>Total recordings today = {dailyTotalRecordings || 0}</p>
-    <p>Total pronunciation cards today = {dailyTotalPronunciationCards || 0}</p>
+    <div class="container">
+      <div class="column">
+        <h3>Deck</h3>
+        <hr />
+        <p>Total future = {totalFuture || 0}</p>
+        <p>Total due = {totalDue || 0}</p>
+        <p>Total currently learning = {totalLearning || 0}</p>
+        <p>Total mastered = {totalMastered || 0}</p>
+      </div>
+      <div class="column">
+        <h3>Cards Today</h3>
+        <hr />
+        <p>Total cards today = {dailyTotalCards || 0}</p>
+        <p>Total correct today = {dailyCorrectCards || 0}</p>
+        <p>Total incorrect today = {dailyIncorrectCards || 0}</p>
+        <p>Total new today = {dailyNewCards || 0}</p>
+        <p>Total reviewed today = {dailyReviewCards || 0}</p>
+      </div>
+      <div class="column">
+        <h3>Pronunciation today</h3>
+        <hr />
+        <p>Total recordings today = {dailyTotalRecordings || 0}</p>
+        <p>Total pronunciation cards today = {dailyTotalPronunciationCards || 0}</p>
+      </div>
+    </div>
   </div>
   )
 }
