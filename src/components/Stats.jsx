@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReviewSpeed, LocalStorageKeys, DailyLocalStorageKeys } from '../utils/utils';
+import { ReviewSpeed, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
 
 export default function Stats({ jsonData }) {
   const [totalFuture, setTotalFuture] = useState(0);
@@ -14,6 +14,8 @@ export default function Stats({ jsonData }) {
   const [dailyReviewCards, setDailyReviewCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS));
   const [dailyTotalRecordings, setDailyTotalRecordings] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALRECORDINGS));
   const [dailyTotalPronunciationCards, setDailyTotalPronunciationCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS));
+  let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
+  let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
 
   useEffect(() => {
     let settingsInterval = localStorage.getItem(LocalStorageKeys.SPEED);
@@ -31,26 +33,26 @@ export default function Stats({ jsonData }) {
       let storedInterval = localStorage.getItem(jsonData[index].nlID + ",interval");
       if (dateStr && storedInterval && Date.parse(dateStr) > now && Number(storedInterval) < Number(settingsInterval)) {
         localTotalFuture = localTotalFuture + 1;
-        setTotalFuture(localTotalFuture);
       }
       // count mastered
       if (storedInterval && Number(storedInterval) >= Number(settingsInterval)) {
         localTotalMastered = localTotalMastered + 1;
-        setTotalMastered(localTotalMastered);
       }
       // count learning
       if (storedInterval && Number(storedInterval) > 0 && Number(storedInterval) < Number(settingsInterval)) {
         localTotalLearning = localTotalLearning + 1;
-        setTotalLearning(localTotalLearning);
       }
       // count due
-      if ((!dateStr || Date.parse(dateStr) < now) // date before now
+      if ((dateStr && Date.parse(dateStr) < now) // date before now
         && (!storedInterval || Number(storedInterval) < Number(settingsInterval))) { //not mastered
           localTotalDue = localTotalDue + 1;
-          setTotalDue(localTotalDue);
       }
       index = index + 1;
     }
+    setTotalFuture(localTotalFuture);
+    setTotalMastered(localTotalMastered);
+    setTotalLearning(localTotalLearning);
+    setTotalDue(localTotalDue > maxReview ? maxReview : localTotalDue);
   }, []);
   return (
   <div>
