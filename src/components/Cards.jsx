@@ -12,8 +12,14 @@ export default function Cards({ jsonData }) {
   let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
   let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
 
+  const isDateString = (str) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/; // Example: YYYY-MM-DD
+    if (!regex.test(str)) return false;
+    return true;
+  }
+
   const getNextStartingAt = (index) => {
-    let today = new Date().toDateString();
+    let today = new Date().toISOString().split('T')[0];
     let reviewedToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS) || 0;
     let newToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.NEWCARDS) || 0;
     let nextIsReview = reviewedToday < maxReview;
@@ -23,16 +29,16 @@ export default function Cards({ jsonData }) {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         const value = localStorage.getItem(key);
-
         // Check if the value matches the condition
-        if (value === today) {
-          nextCard = parseInt(key.split(",")[0]);
+        if (isDateString(value) && value <= today) { // due before or on today's date
+          nextCard = jsonData.findIndex(card => card.nlID == key.split(",")[0]);
+          console.log("review " + nextCard);
           setShowScore(false);
           return nextCard;
         }
       }
     }
-    let nextIsNew = nextCard < 0 && newToday < maxNew;
+    let nextIsNew = newToday < maxNew;
     if (nextIsNew) {
       nextCard = index + 1;
       while (nextCard < jsonData.length)
@@ -41,6 +47,7 @@ export default function Cards({ jsonData }) {
         if (currCardReviewDate == null) // new card
         {
           setShowScore(false);
+          console.log("new " + nextCard);
           return nextCard;
         } else {
           nextCard++;
@@ -48,13 +55,14 @@ export default function Cards({ jsonData }) {
       }
     } else {
 			setShowScore(true);
+      console.log("getnext didn't find");
       return -1;
 		}
   }
 
 	const answerClick = (isCorrect) => {
     //get current step
-    let today = new Date().toDateString();
+    let today = new Date().toISOString().split('T')[0];
     let interval = getInterval(currentQuestion.current);
     let reviewDate = getReviewDate(currentQuestion.current);
     let isNew = reviewDate ? false : true;
@@ -76,7 +84,7 @@ export default function Cards({ jsonData }) {
       setScore(score);
       interval > 1 ? interval = interval / 2 : interval = interval - 1;
     }     
-    reviewDate = new Date(new Date(reviewDate).setDate(new Date(reviewDate).getDate() + interval)).toDateString();
+    reviewDate = new Date(new Date(reviewDate).setDate(new Date(reviewDate).getDate() + interval)).toISOString().split('T')[0];
     
     console.log(jsonData[currentQuestion.current].nlID + ',interval');
     console.log(interval);
@@ -140,6 +148,7 @@ export default function Cards({ jsonData }) {
 
   useEffect(() => {
     currentQuestion.current = getNextStartingAt(-1);
+    setCurrentDisplayQuestion(currentQuestion.current);
     forceUpdate();
   }, []);
    

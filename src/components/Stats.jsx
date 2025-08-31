@@ -6,7 +6,7 @@ export default function Stats({ jsonData }) {
   const [totalDue, setTotalDue] = useState(0);
   const [totalLearning, setTotalLearning] = useState(0);
   const [totalMastered, setTotalMastered] = useState(0);
-  let today = new Date().toDateString();
+  let today = new Date().toISOString().split('T')[0];
   const [dailyTotalCards, setDailyTotalCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALCARDS));
   const [dailyCorrectCards, setDailyCorrectCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.CORRECTCARDS));
   const [dailyIncorrectCards, setDailyIncorrectCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.INCORRECTCARDS));
