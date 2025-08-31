@@ -21,7 +21,9 @@
   export const LocalStorageKeys = {
     SPEED: "speed",
     CARDFRONTLANGUAGE: "cardFrontLanguage",
-    CARDORDER: "cardOrder"
+    CARDORDER: "cardOrder",
+    MAXNEW: "maxNew",
+    MAXREVIEW: "maxReview"
   }
   export const DailyLocalStorageKeys = {
     TOTALCARDS: "totalCards",

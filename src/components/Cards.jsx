@@ -9,21 +9,44 @@ export default function Cards({ jsonData }) {
 	const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(false);
   let cardFrontLanguage = localStorage.getItem(LocalStorageKeys.CARDFRONTLANGUAGE);
+  let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
+  let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
 
   const getNextStartingAt = (index) => {
-    let nextCard = index + 1;
-    while (nextCard < jsonData.length)
+    let today = new Date().toDateString();
+    let reviewedToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS) || 0;
+    let newToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.NEWCARDS) || 0;
+    let nextIsReview = reviewedToday < maxReview;
+    let nextCard = -1;
+    if (nextIsReview)
     {
-      let currCardReviewDate = getReviewDate(nextCard);
-      if (currCardReviewDate == null || Date.parse(currCardReviewDate) <= Date.now()) {
-        break;
-      } else {
-      nextCard = nextCard + 1;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+
+        // Check if the value matches the condition
+        if (value === today) {
+          nextCard = parseInt(key.split(",")[0]);
+          setShowScore(false);
+          return nextCard;
+        }
       }
     }
-		if (nextCard < jsonData.length) {
-			return nextCard;
-		} else {
+    let nextIsNew = nextCard < 0 && newToday < maxNew;
+    if (nextIsNew) {
+      nextCard = index + 1;
+      while (nextCard < jsonData.length)
+      {
+        let currCardReviewDate = getReviewDate(nextCard);
+        if (currCardReviewDate == null) // new card
+        {
+          setShowScore(false);
+          return nextCard;
+        } else {
+          nextCard++;
+        }
+      }
+    } else {
 			setShowScore(true);
       return -1;
 		}
@@ -122,14 +145,17 @@ export default function Cards({ jsonData }) {
    
   return (
   <div>
-    <div className="card-block" onClick={() => setFlip(!flip)}>
-      <h3 className={`card ${flip ? 'down' : 'up'}`}>{cardFrontLanguage == CardFrontLanguage.NATIVE ? jsonData[currentDisplayQuestion].nltext : jsonData[currentDisplayQuestion].tltext}</h3>
-      <h3 className={`card ${flip ? 'up' : 'down'}`}>{cardFrontLanguage == CardFrontLanguage.NATIVE ? jsonData[currentDisplayQuestion].tltext : jsonData[currentDisplayQuestion].nltext}</h3>
-    </div> 
-    <div>
-      <button onClick={() => answerClick(false)}>incorrect</button>
-      <button onClick={() => answerClick(true)}>correct</button>
-    </div>
+    {!showScore ? 
+    (<div>
+      <div className="card-block" onClick={() => setFlip(!flip)}>
+        <h3 className={`card ${flip ? 'down' : 'up'}`}>{cardFrontLanguage == CardFrontLanguage.NATIVE ? jsonData[currentDisplayQuestion].nltext : jsonData[currentDisplayQuestion].tltext}</h3>
+        <h3 className={`card ${flip ? 'up' : 'down'}`}>{cardFrontLanguage == CardFrontLanguage.NATIVE ? jsonData[currentDisplayQuestion].tltext : jsonData[currentDisplayQuestion].nltext}</h3>
+      </div> 
+      <div>
+        <button onClick={() => answerClick(false)}>incorrect</button>
+        <button onClick={() => answerClick(true)}>correct</button>
+      </div>
+    </div>) : <div>You finished for today!</div>}
     <p>current score = {score}</p>
   </div>
   )

@@ -55,8 +55,8 @@ export default function Stats({ jsonData }) {
   return (
   <div>
     <h2>Stats</h2>
-    <div class="container">
-      <div class="column">
+    <div className="container">
+      <div className="column">
         <h3>Deck</h3>
         <hr />
         <p>Total future = {totalFuture || 0}</p>
@@ -64,7 +64,7 @@ export default function Stats({ jsonData }) {
         <p>Total currently learning = {totalLearning || 0}</p>
         <p>Total mastered = {totalMastered || 0}</p>
       </div>
-      <div class="column">
+      <div className="column">
         <h3>Cards Today</h3>
         <hr />
         <p>Total cards today = {dailyTotalCards || 0}</p>
@@ -73,7 +73,7 @@ export default function Stats({ jsonData }) {
         <p>Total new today = {dailyNewCards || 0}</p>
         <p>Total reviewed today = {dailyReviewCards || 0}</p>
       </div>
-      <div class="column">
+      <div className="column">
         <h3>Pronunciation today</h3>
         <hr />
         <p>Total recordings today = {dailyTotalRecordings || 0}</p>
