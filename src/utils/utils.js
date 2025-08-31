@@ -4,6 +4,13 @@
     copy.setDate(copy.getDate() + days);
     return copy.toUTCString();
   };
+
+  
+  export function isDateString (str) {
+    const regex = /^\d{4}-\d{2}-\d{2}$/; // Example: YYYY-MM-DD
+    if (!regex.test(str)) return false;
+    return true;
+  };
   
   export const ReviewSpeed = {
     SLOW: '32',

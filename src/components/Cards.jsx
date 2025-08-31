@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { CardFrontLanguage, LocalStorageKeys, DailyLocalStorageKeys } from '../utils/utils';
+import { CardFrontLanguage, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
 
 export default function Cards({ jsonData }) {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -11,12 +11,6 @@ export default function Cards({ jsonData }) {
   let cardFrontLanguage = localStorage.getItem(LocalStorageKeys.CARDFRONTLANGUAGE);
   let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
   let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
-
-  const isDateString = (str) => {
-    const regex = /^\d{4}-\d{2}-\d{2}$/; // Example: YYYY-MM-DD
-    if (!regex.test(str)) return false;
-    return true;
-  }
 
   const getNextStartingAt = (index) => {
     let today = new Date().toISOString().split('T')[0];
