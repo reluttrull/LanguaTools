@@ -11,7 +11,7 @@ const Pronunciation = ({ jsonData }) => {
   const [showFinished, setShowFinished] = useState(false);
   const [displayCurrentQuestion, setDisplayCurrentQuestion] = useState(0);
   let currentQuestion = 0;
-  let today = new Date().toDateString();
+  let today = new Date().toISOString().split('T')[0];
 
   const getNextStartingAt = (index) => {
     console.log('current index: ' + index);
