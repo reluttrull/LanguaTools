@@ -7,20 +7,26 @@ export default function Settings() {
   const [cardOrder, setCardOrder] = useState(localStorage.getItem(LocalStorageKeys.CARDORDER));
   const [maxNew, setMaxNew] = useState(localStorage.getItem(LocalStorageKeys.MAXNEW));
   const [maxReview, setMaxReview] = useState(localStorage.getItem(LocalStorageKeys.MAXREVIEW));
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const handleSpeedChange = (event) => {
     setSpeed(event.target.value);
+    setHasUnsavedChanges(true);
   };
   const handleCardFrontChange = (event) => {
     setCardFront(event.target.value);
+    setHasUnsavedChanges(true);
   };
   const handleCardOrderChange = (event) => {
     setCardOrder(event.target.value);
+    setHasUnsavedChanges(true);
   };
   const handleMaxNewChange = (event) => {
     setMaxNew(event.target.value);
+    setHasUnsavedChanges(true);
   };
   const handleMaxReviewChange = (event) => {
     setMaxReview(event.target.value);
+    setHasUnsavedChanges(true);
   };
   const saveChanges = () => {
     if (speed) localStorage.setItem(LocalStorageKeys.SPEED, speed);
@@ -28,6 +34,7 @@ export default function Settings() {
     if (cardOrder) localStorage.setItem(LocalStorageKeys.CARDORDER, cardOrder);
     if (maxNew) localStorage.setItem(LocalStorageKeys.MAXNEW, maxNew);
     if (maxReview) localStorage.setItem(LocalStorageKeys.MAXREVIEW, maxReview);
+    setHasUnsavedChanges(false);
   }
 
   return (
@@ -66,7 +73,7 @@ export default function Settings() {
           value={maxReview ? maxReview : 40} onChange={handleMaxReviewChange} />
     </div>
 
-    <button onClick={() => saveChanges()}>Save Changes</button>
+    <button className={hasUnsavedChanges ? "up" : "down"} onClick={() => saveChanges()}>Save Changes</button>
   </div>
   )
 }
