@@ -41,36 +41,38 @@ export default function Settings() {
   <div>
     <h2>Settings</h2>    
     <div>
-      <label htmlFor="dropdown">Review speed:</label>
-      <select id="dropdown" value={speed ? speed : ReviewSpeed.NORMAL} onChange={handleSpeedChange}>
+      <label htmlFor="reviewSpeedDropdown">Review speed:</label>
+      <select id="reviewSpeedDropdown" value={speed ? speed : ReviewSpeed.NORMAL} onChange={handleSpeedChange}>
         <option value={ReviewSpeed.SLOW}>Slow</option>
         <option value={ReviewSpeed.NORMAL}>Normal</option>
         <option value={ReviewSpeed.FAST}>Fast</option>
       </select>  
     </div>
     <div>
-      <label htmlFor="dropdown">Language on card front:</label>
-      <select id="dropdown" value={cardFront ? cardFront : CardFrontLanguage.TARGET} onChange={handleCardFrontChange}>
+      <label htmlFor="cardFrontLanguageDropdown">Language on card front:</label>
+      <select id="cardFrontLanguageDropdown" value={cardFront ? cardFront : CardFrontLanguage.TARGET} onChange={handleCardFrontChange}>
         <option value={CardFrontLanguage.TARGET}>Target language</option>
         <option value={CardFrontLanguage.NATIVE}>Native language</option>
       </select>
     </div>  
     <div>
-      <label htmlFor="dropdown">Card order:</label>
-      <select id="dropdown" value={cardOrder ? cardOrder : CardOrder.INORDER} onChange={handleCardOrderChange}>
+      <label htmlFor="cardOrderDropdown">Card order:</label>
+      <select id="cardOrderDropdown" value={cardOrder ? cardOrder : CardOrder.INORDER} onChange={handleCardOrderChange}>
         <option value={CardOrder.INORDER}>In order</option>
         <option value={CardOrder.SHUFFLED}>Shuffled</option>
       </select>  
     </div>
     <div>
-      <span>{maxNew ? maxNew : 10}</span>
+      <label htmlFor="maxNewSlider">Max new per day:</label>
       <input id="maxNewSlider" type="range" min="0" max="100" step="5" 
           value={maxNew ? maxNew : 10} onChange={handleMaxNewChange} />
+      <span>{maxNew ? maxNew : 10}</span>
     </div>
     <div>
-      <span>{maxReview ? maxReview : 40}</span>
+      <label htmlFor="maxReviewSlider">Max review per day:</label>
       <input id="maxReviewSlider" type="range" min="0" max="200" step="5" 
           value={maxReview ? maxReview : 40} onChange={handleMaxReviewChange} />
+      <span>{maxReview ? maxReview : 40}</span>
     </div>
 
     <button className={hasUnsavedChanges ? "up" : "down"} onClick={() => saveChanges()}>Save Changes</button>
