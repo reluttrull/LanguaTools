@@ -20,7 +20,13 @@ export default function App () {
     PRONUNCIATION: 'pronunciation'
   };
   const [user, setUser] = useState(null);
-  const [tab, setTab] = useState(Tabs.REVIEW);
+  const [tab, setTab] = useState(Tabs.REVIEW);  
+  const [isMenuCollapsed, setIsMenuCollapsed] = useState(true);
+  const toggleMenu = () => setIsMenuCollapsed(!isMenuCollapsed);
+  const setTabCloseMenu = (tab) => {
+    setTab(tab);
+    toggleMenu();
+  }
   const login = (userData) => {
     setUser(userData);
   }
@@ -37,11 +43,22 @@ export default function App () {
 
   return (
     <div>
-      <div id="tabbar">
-        <button onClick={() => {setTab(Tabs.REVIEW)}}><FaBookOpen /></button>
-        <button onClick={() => {setTab(Tabs.SETTINGS)}}><FaGear /></button>
-        <button onClick={() => {setTab(Tabs.STATS)}}><FaChartLine /></button>
-        <button onClick={() => {setTab(Tabs.PRONUNCIATION)}}><FaMicrophone /></button>
+      <div id="header">
+        <h1 style={{ display: "inline", paddingRight: "20px", cursor: "pointer" }}
+                  onClick={() => setTab(Tabs.REVIEW)}>LanguaTools</h1>
+        <span style={{ width: isMenuCollapsed ? "50px" : "200px", transition: "width 0.3s", cursor: "pointer" }}>
+          <button onClick={toggleMenu}>
+            {isMenuCollapsed ? "☰" : "Close"}
+          </button>
+          {!isMenuCollapsed && (
+            <div>
+              <div onClick={() => setTabCloseMenu(Tabs.REVIEW)}>Study Cards</div>
+              <div onClick={() => setTabCloseMenu(Tabs.SETTINGS)}>Settings</div>
+              <div onClick={() => setTabCloseMenu(Tabs.STATS)}>Statistics</div>
+              <div onClick={() => setTabCloseMenu(Tabs.PRONUNCIATION)}>Pronunciation Practice</div>
+            </div>
+          )}
+        </span>
       </div>
       { tab == Tabs.REVIEW ? <Cards jsonData={stateJsonData} /> : <div></div>}
       { tab == Tabs.SETTINGS ? <Settings /> : <div></div>}
