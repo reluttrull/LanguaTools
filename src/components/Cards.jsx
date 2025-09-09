@@ -78,7 +78,7 @@ export default function Cards({ jsonData }) {
       setScore(score);
       interval > 1 ? interval = interval / 2 : interval = interval - 1;
     }     
-    reviewDate = new Date(new Date(reviewDate).setDate(new Date(reviewDate).getDate() + interval)).toISOString().split('T')[0];
+    reviewDate = new Date(new Date(reviewDate).setDate(new Date(today).getDate() + interval)).toISOString().split('T')[0];
     
     console.log(jsonData[currentQuestion.current].nlID + ',interval');
     console.log(interval);
