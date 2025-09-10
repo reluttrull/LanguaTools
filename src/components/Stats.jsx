@@ -26,11 +26,11 @@ export default function Stats({ jsonData }) {
     let localTotalMastered = 0;
     let index = 0;
     let now = Date.now();
-    // go through user stored card data
+    // go through user stored review data
     while (index < jsonData.length) {
-      // count future
       let dateStr = localStorage.getItem(jsonData[index].nlID + ",reviewDate");
       let storedInterval = localStorage.getItem(jsonData[index].nlID + ",interval");
+      // count future
       if (dateStr && storedInterval && Date.parse(dateStr) > now && Number(storedInterval) < Number(settingsInterval)) {
         localTotalFuture = localTotalFuture + 1;
       }
