@@ -26,7 +26,7 @@ const Pronunciation = ({ jsonData }) => {
     setDisplayCurrentQuestion(currentQuestion);
     
     let dailyTotalPronunciationCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS);
-    if (!dailyTotalPronunciationCards) dailyTotalPronunciationCards = '1';
+    if (!dailyTotalPronunciationCards) dailyTotalPronunciationCards = 0;
     dailyTotalPronunciationCards++;
     localStorage.setItem(today + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS, dailyTotalPronunciationCards);
   }

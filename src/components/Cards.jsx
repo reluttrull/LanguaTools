@@ -4,20 +4,23 @@ import { CardFrontLanguage, LocalStorageKeys, DailyLocalStorageKeys, isDateStrin
 export default function Cards({ jsonData }) {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   const [currentDisplayQuestion, setCurrentDisplayQuestion] = useState(0);
-  let currentQuestion = useRef(0);
+  let currentQuestion = useRef(0); // updates with state
 	const [showScore, setShowScore] = useState(false);
 	const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(false);
+  let today = new Date().toISOString().split('T')[0]; // match stored format
+  // from user settings
   let cardFrontLanguage = localStorage.getItem(LocalStorageKeys.CARDFRONTLANGUAGE);
   let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
   let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
 
+
   const getNextStartingAt = (index) => {
-    let today = new Date().toISOString().split('T')[0];
     let reviewedToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS) || 0;
     let newToday = localStorage.getItem(today + ',' + DailyLocalStorageKeys.NEWCARDS) || 0;
     let nextIsReview = reviewedToday < maxReview;
     let nextCard = -1;
+    // check for available reviews first
     if (nextIsReview)
     {
       for (let i = 0; i < localStorage.length; i++) {
@@ -26,46 +29,43 @@ export default function Cards({ jsonData }) {
         // Check if the value matches the condition
         if (isDateString(value) && value <= today) { // due before or on today's date
           nextCard = jsonData.findIndex(card => card.nlID == key.split(",")[0]);
-          console.log("review " + nextCard);
-          setShowScore(false);
           return nextCard;
         }
       }
     }
+    // then, if we still have new cards left today, study those
     let nextIsNew = newToday < maxNew;
     if (nextIsNew) {
       nextCard = index + 1;
       while (nextCard < jsonData.length)
       {
         let currCardReviewDate = getReviewDate(nextCard);
-        if (currCardReviewDate == null) // new card
-        {
-          setShowScore(false);
-          console.log("new " + nextCard);
-          return nextCard;
-        } else {
-          nextCard++;
-        }
+        if (currCardReviewDate == null) return nextCard; // new card, so return it
+        else nextCard++;
       }
     } else {
+      // if we're out of reviews and new cards, don't show more cards today
 			setShowScore(true);
-      console.log("getnext didn't find");
       return -1;
 		}
   }
 
+  const incrementCardsStat = (key) => {
+    let count = localStorage.getItem(today + ',' + key);
+    if (count) {
+      count++;
+    } else {
+      count = 1;
+    }
+    localStorage.setItem(today + ',' + key, count);
+  }
+
 	const answerClick = (isCorrect) => {
     //get current step
-    let today = new Date().toISOString().split('T')[0];
     let interval = getInterval(currentQuestion.current);
     let reviewDate = getReviewDate(currentQuestion.current);
     let isNew = reviewDate ? false : true;
-    let dailyTotalCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALCARDS);
-    let dailyCorrectCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.CORRECTCARDS);
-    let dailyIncorrectCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.INCORRECTCARDS);
-    let dailyNewCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.NEWCARDS);
-    let dailyReviewCards = localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS);
-    if (!reviewDate) { 
+    if (isNew) { 
       reviewDate = today;
     }
 
@@ -75,46 +75,28 @@ export default function Cards({ jsonData }) {
       interval > 0 ? interval = interval * 2 : interval = interval + 1;
 		}
     else {
-      setScore(score);
-      interval > 1 ? interval = interval / 2 : interval = interval - 1;
+      interval > 1 ? interval = interval / 2 : interval = 1;
     }     
-    reviewDate = new Date(new Date(reviewDate).setDate(new Date(today).getDate() + interval)).toISOString().split('T')[0];
+    // add interval to review date and format for storage
+    reviewDate = new Date(new Date(reviewDate).setDate(new Date(today).getDate() + interval))
+                                .toISOString().split('T')[0];
     
-    console.log(jsonData[currentQuestion.current].nlID + ',interval');
-    console.log(interval);
     //write to localstorage
     localStorage.setItem(jsonData[currentQuestion.current].nlID + ',interval', interval);
     localStorage.setItem(jsonData[currentQuestion.current].nlID + ',reviewDate', reviewDate);
-    if (dailyTotalCards) {
-      dailyTotalCards++;
-    } else {
-      dailyTotalCards = 1;
-    }
-    localStorage.setItem(today + ',' + DailyLocalStorageKeys.TOTALCARDS, dailyTotalCards);
+
+    incrementCardsStat(DailyLocalStorageKeys.TOTALCARDS);
     if (isCorrect) {
-      if (dailyCorrectCards) {
-        dailyCorrectCards++;
-      } else {
-        dailyCorrectCards = 1;
-      }
-      localStorage.setItem(today + ',' + DailyLocalStorageKeys.CORRECTCARDS, dailyCorrectCards);
+      incrementCardsStat(DailyLocalStorageKeys.CORRECTCARDS);
     } else {
-      if (dailyIncorrectCards) {
-        dailyIncorrectCards++;
-      } else {
-        dailyIncorrectCards = 1;
-      }
-      localStorage.setItem(today + ',' + DailyLocalStorageKeys.INCORRECTCARDS, dailyIncorrectCards);
+      incrementCardsStat(DailyLocalStorageKeys.INCORRECTCARDS);
     }
 
     if (isNew) {
-      dailyNewCards++;
-      localStorage.setItem(today + ',' + DailyLocalStorageKeys.NEWCARDS, dailyNewCards);
+      incrementCardsStat(DailyLocalStorageKeys.NEWCARDS);
     } else {
-      dailyReviewCards++;
-      localStorage.setItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS, dailyReviewCards);
+      incrementCardsStat(DailyLocalStorageKeys.REVIEWCARDS);
     }
-    localStorage.setItem(today + ',' + DailyLocalStorageKeys.TOTALCARDS, dailyTotalCards);
 
     //move on
 		currentQuestion.current = getNextStartingAt(currentQuestion.current);
