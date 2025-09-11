@@ -23,7 +23,7 @@ export default function Stats({ jsonData, thisDay }) {
 
   return (
   <div>
-    <h3>{thisDay}</h3>
+    {/* <h3>{thisDay}</h3> */}
     <hr />
     <div className="container">
       <div className="column">
