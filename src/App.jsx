@@ -5,6 +5,7 @@ import { CardOrder, LocalStorageKeys } from './utils/utils.js';
 import Cards from './components/Cards.jsx';
 import Settings from './components/Settings.jsx';
 import Stats from './components/Stats.jsx';
+import DailyStats from './components/DailyStats.jsx';
 import LoginForm from './components/LoginForm.jsx';
 import Pronunciation from './components/Pronunciation.jsx';
 import jsonData from './data/sentencePairs.json';
@@ -17,6 +18,7 @@ export default function App () {
     REVIEW: 'review',
     SETTINGS: 'settings',
     STATS: 'stats',
+    DAILYSTATS: 'daily stats',
     PRONUNCIATION: 'pronunciation'
   };
   const [user, setUser] = useState(null);
@@ -55,6 +57,7 @@ export default function App () {
               <div onClick={() => setTabCloseMenu(Tabs.REVIEW)}>Study Cards</div>
               <div onClick={() => setTabCloseMenu(Tabs.SETTINGS)}>Settings</div>
               <div onClick={() => setTabCloseMenu(Tabs.STATS)}>Statistics</div>
+              <div onClick={() => setTabCloseMenu(Tabs.DAILYSTATS)}>Daily Stats</div>
               <div onClick={() => setTabCloseMenu(Tabs.PRONUNCIATION)}>Pronunciation Practice</div>
             </div>
           )}
@@ -63,6 +66,7 @@ export default function App () {
       { tab == Tabs.REVIEW ? <Cards jsonData={stateJsonData} /> : <div></div>}
       { tab == Tabs.SETTINGS ? <Settings /> : <div></div>}
       { tab == Tabs.STATS ? <Stats jsonData={stateJsonData} /> : <div></div>}
+      { tab == Tabs.DAILYSTATS ? <DailyStats jsonData={stateJsonData} thisDay={new Date().toISOString().split('T')[0]} /> : <div></div>}
       { tab == Tabs.PRONUNCIATION ? <Pronunciation jsonData={stateJsonData} /> : <div></div>}
     </div>
   )
