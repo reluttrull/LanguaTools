@@ -17,7 +17,8 @@ export default function Stats({ jsonData, thisDay }) {
 
   return (
   <div>
-    <h2>Stats {thisDay}</h2>
+    <h3>On {thisDay}:</h3>
+    <hr />
     <div className="container">
       <div className="column">
         <h3>Cards</h3>
