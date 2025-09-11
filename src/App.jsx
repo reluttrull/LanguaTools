@@ -5,7 +5,6 @@ import { CardOrder, LocalStorageKeys } from './utils/utils.js';
 import Cards from './components/Cards.jsx';
 import Settings from './components/Settings.jsx';
 import Stats from './components/Stats.jsx';
-import LoginForm from './components/LoginForm.jsx';
 import Pronunciation from './components/Pronunciation.jsx';
 import jsonData from './data/sentencePairs.json';
 import js from '@eslint/js';
@@ -17,6 +16,7 @@ export default function App () {
     REVIEW: 'review',
     SETTINGS: 'settings',
     STATS: 'stats',
+    DAILYSTATS: 'daily stats',
     PRONUNCIATION: 'pronunciation'
   };
   const [user, setUser] = useState(null);

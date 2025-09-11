@@ -5,6 +5,11 @@
     return copy.toUTCString();
   };
 
+  export function addDaysToDateString(datestr, days) {
+    if (!isDateString(datestr)) return null;
+    return new Date(new Date().setDate(new Date(datestr).getUTCDate() + days))
+                                .toISOString().split('T')[0];
+  }
   
   export function isDateString (str) {
     const regex = /^\d{4}-\d{2}-\d{2}$/; // Example: YYYY-MM-DD

@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { ReviewSpeed, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
+import { ReviewSpeed, LocalStorageKeys, addDaysToDateString } from '../utils/utils';
+import DailyStats from './DailyStats.jsx';
 
 export default function Stats({ jsonData }) {
   const [totalFuture, setTotalFuture] = useState(0);
   const [totalDue, setTotalDue] = useState(0);
   const [totalLearning, setTotalLearning] = useState(0);
   const [totalMastered, setTotalMastered] = useState(0);
-  let today = new Date().toISOString().split('T')[0];
-  const [dailyTotalCards, setDailyTotalCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALCARDS));
-  const [dailyCorrectCards, setDailyCorrectCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.CORRECTCARDS));
-  const [dailyIncorrectCards, setDailyIncorrectCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.INCORRECTCARDS));
-  const [dailyNewCards, setDailyNewCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.NEWCARDS));
-  const [dailyReviewCards, setDailyReviewCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.REVIEWCARDS));
-  const [dailyTotalRecordings, setDailyTotalRecordings] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALRECORDINGS));
-  const [dailyTotalPronunciationCards, setDailyTotalPronunciationCards] = useState(localStorage.getItem(today + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS));
+  const [thisDay, setThisDay] = useState(new Date().toISOString().split('T')[0]);
   let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
   let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
+
+  const incrementDate = (num) => {
+    setThisDay(addDaysToDateString(thisDay, num));
+  }
 
   useEffect(() => {
     let settingsInterval = localStorage.getItem(LocalStorageKeys.SPEED);
@@ -57,31 +55,20 @@ export default function Stats({ jsonData }) {
   return (
   <div>
     <h2>Stats</h2>
-    <div className="container">
-      <div className="column">
-        <h3>Deck</h3>
-        <hr />
-        <p>Total future = {totalFuture || 0}</p>
-        <p>Total due = {totalDue || 0}</p>
-        <p>Total currently learning = {totalLearning || 0}</p>
-        <p>Total mastered = {totalMastered || 0}</p>
-      </div>
-      <div className="column">
-        <h3>Cards Today</h3>
-        <hr />
-        <p>Total cards today = {dailyTotalCards || 0}</p>
-        <p>Total correct today = {dailyCorrectCards || 0}</p>
-        <p>Total incorrect today = {dailyIncorrectCards || 0}</p>
-        <p>Total new today = {dailyNewCards || 0}</p>
-        <p>Total reviewed today = {dailyReviewCards || 0}</p>
-      </div>
-      <div className="column">
-        <h3>Pronunciation today</h3>
-        <hr />
-        <p>Total recordings today = {dailyTotalRecordings || 0}</p>
-        <p>Total pronunciation cards today = {dailyTotalPronunciationCards || 0}</p>
-      </div>
+    <div>
+      <h3>Deck</h3>
+      <hr />
+      <p>Total future = {totalFuture || 0}</p>
+      <p>Total due = {totalDue || 0}</p>
+      <p>Total currently learning = {totalLearning || 0}</p>
+      <p>Total mastered = {totalMastered || 0}</p>
     </div>
+    <div class="date-picker">
+      <button onClick={() => incrementDate(-1)}>-</button>
+      <span><strong>{thisDay}</strong></span>
+      <button onClick={() => incrementDate(1)}>+</button>
+    </div>
+    <DailyStats jsonData={jsonData} thisDay={thisDay} />
   </div>
   )
 }
