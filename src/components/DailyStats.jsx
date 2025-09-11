@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ReviewSpeed, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
+import { DailyLocalStorageKeys } from '../utils/utils';
 
 export default function Stats({ jsonData, thisDay }) {
-  const [totalFuture, setTotalFuture] = useState(0);
-  const [totalDue, setTotalDue] = useState(0);
-  const [totalLearning, setTotalLearning] = useState(0);
-  const [totalMastered, setTotalMastered] = useState(0);
-  //let thisDay = new Date().toISOString().split('T')[0];
   const [dailyTotalCards, setDailyTotalCards] = useState(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALCARDS));
   const [dailyCorrectCards, setDailyCorrectCards] = useState(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.CORRECTCARDS));
   const [dailyIncorrectCards, setDailyIncorrectCards] = useState(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.INCORRECTCARDS));
@@ -15,9 +10,20 @@ export default function Stats({ jsonData, thisDay }) {
   const [dailyTotalRecordings, setDailyTotalRecordings] = useState(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALRECORDINGS));
   const [dailyTotalPronunciationCards, setDailyTotalPronunciationCards] = useState(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS));
 
+  useEffect(() => {
+    // update when date changes
+    setDailyTotalCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALCARDS));
+    setDailyCorrectCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.CORRECTCARDS));
+    setDailyIncorrectCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.INCORRECTCARDS));
+    setDailyNewCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.NEWCARDS));
+    setDailyReviewCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.REVIEWCARDS));
+    setDailyTotalRecordings(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALRECORDINGS));
+    setDailyTotalPronunciationCards(localStorage.getItem(thisDay + ',' + DailyLocalStorageKeys.TOTALPRONUNCIATIONCARDS));
+  }, [thisDay]);
+
   return (
   <div>
-    <h3>On {thisDay}:</h3>
+    <h3>{thisDay}</h3>
     <hr />
     <div className="container">
       <div className="column">

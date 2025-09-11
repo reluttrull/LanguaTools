@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ReviewSpeed, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
+import { ReviewSpeed, LocalStorageKeys, addDaysToDateString } from '../utils/utils';
 import DailyStats from './DailyStats.jsx';
 
 export default function Stats({ jsonData }) {
@@ -10,6 +10,10 @@ export default function Stats({ jsonData }) {
   const [thisDay, setThisDay] = useState(new Date().toISOString().split('T')[0]);
   let maxNew = localStorage.getItem(LocalStorageKeys.MAXNEW) || 10;
   let maxReview = localStorage.getItem(LocalStorageKeys.MAXREVIEW) || 40;
+
+  const incrementDate = (num) => {
+    setThisDay(addDaysToDateString(thisDay, num));
+  }
 
   useEffect(() => {
     let settingsInterval = localStorage.getItem(LocalStorageKeys.SPEED);
@@ -59,6 +63,8 @@ export default function Stats({ jsonData }) {
       <p>Total currently learning = {totalLearning || 0}</p>
       <p>Total mastered = {totalMastered || 0}</p>
     </div>
+    <button onClick={() => incrementDate(-1)}>-</button>
+    <button onClick={() => incrementDate(1)}>+</button>
     <DailyStats jsonData={jsonData} thisDay={thisDay} />
   </div>
   )

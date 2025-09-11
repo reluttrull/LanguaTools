@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { CardFrontLanguage, LocalStorageKeys, DailyLocalStorageKeys, isDateString } from '../utils/utils';
+import { CardFrontLanguage, LocalStorageKeys, DailyLocalStorageKeys, isDateString, addDaysToDateString } from '../utils/utils';
 
 export default function Cards({ jsonData }) {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -78,8 +78,7 @@ export default function Cards({ jsonData }) {
       interval > 1 ? interval = interval / 2 : interval = 1;
     }     
     // add interval to review date and format for storage
-    reviewDate = new Date(new Date(reviewDate).setDate(new Date(today).getDate() + interval))
-                                .toISOString().split('T')[0];
+    reviewDate = addDaysToDateString(today, interval);
     
     //write to localstorage
     localStorage.setItem(jsonData[currentQuestion.current].nlID + ',interval', interval);
