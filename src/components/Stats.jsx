@@ -54,7 +54,7 @@ export default function Stats({ jsonData }) {
   }, []);
   return (
   <div>
-    <h2>Stats</h2>
+    <h2>All-time stats</h2>
     <div>
       <h3>Deck</h3>
       <hr />
@@ -63,7 +63,9 @@ export default function Stats({ jsonData }) {
       <p>Total currently learning = {totalLearning || 0}</p>
       <p>Total mastered = {totalMastered || 0}</p>
     </div>
-    <div class="date-picker">
+    <hr />
+    <h2>Stats by date</h2>
+    <div className="date-picker">
       <button onClick={() => incrementDate(-1)}>-</button>
       <span><strong>{thisDay}</strong></span>
       <button onClick={() => incrementDate(1)}>+</button>

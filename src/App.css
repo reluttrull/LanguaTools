@@ -31,6 +31,12 @@
   display:inherit;
 }
 
+.nav-button {
+  all: unset;
+  cursor: pointer; 
+  color: #3333ee;
+}
+
 select {
   background-color: white;
   color: black;
@@ -76,6 +82,10 @@ select {
 .column {
   flex: 1 1 calc(33.33% - 16px); /* 3 columns */
   box-sizing: border-box;
+}
+
+.setting {
+  padding: 20px;
 }
 
 .date-picker > * {
