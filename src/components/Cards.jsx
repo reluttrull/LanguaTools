@@ -8,6 +8,8 @@ export default function Cards({ jsonData }) {
 	const [showScore, setShowScore] = useState(false);
 	const [score, setScore] = useState(0);
   const [flip, setFlip] = useState(false);
+  const [displayInterval, setDisplayInterval] = useState(0);
+  const [showInterval, setShowInterval] = useState(false)
   let today = new Date().toISOString().split('T')[0]; // match stored format
   // from user settings
   let cardFrontLanguage = localStorage.getItem(LocalStorageKeys.CARDFRONTLANGUAGE);
@@ -77,6 +79,11 @@ export default function Cards({ jsonData }) {
     else {
       interval > 1 ? interval = interval / 2 : interval = 1;
     }     
+    setDisplayInterval(interval);
+    setShowInterval(true);
+    setTimeout(() => {
+      setShowInterval(false);
+    }, 2000);
     // add interval to review date and format for storage
     reviewDate = addDaysToDateString(today, interval);
     
@@ -140,7 +147,8 @@ export default function Cards({ jsonData }) {
         <button onClick={() => answerClick(true)}>correct</button>
       </div>
     </div>) : <div>You finished for today!</div>}
-    <p>current score = {score}</p>
+    <p><span id="score">{score}</span> correct</p>
+    <div id="study-feedback" className={`${showInterval ? 'fadein' : 'fadeout'}`}>You'll see that card again in { displayInterval } day{displayInterval > 1 ? 's' : ''}</div>
   </div>
   )
 }

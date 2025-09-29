@@ -84,6 +84,38 @@ select {
   box-sizing: border-box;
 }
 
+#score {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  text-align: right;
+  background: #f8f8fa;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+#study-feedback {
+  /* transform: translateX(-50%); */
+  background: #077796aa;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: opacity 0.4s;
+  /* z-index: 1000; */
+}
+.fadein {
+  opacity: 1;
+  pointer-events: auto;
+}
+.fadeout {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .setting {
   padding: 20px;
 }
