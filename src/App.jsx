@@ -52,10 +52,10 @@ export default function App () {
           </button>
           {!isMenuCollapsed && (
             <div>
-              <div onClick={() => setTabCloseMenu(Tabs.REVIEW)}>Study Cards</div>
-              <div onClick={() => setTabCloseMenu(Tabs.SETTINGS)}>Settings</div>
-              <div onClick={() => setTabCloseMenu(Tabs.STATS)}>Statistics</div>
-              <div onClick={() => setTabCloseMenu(Tabs.PRONUNCIATION)}>Pronunciation Practice</div>
+              <div><button className="nav-button" onClick={() => setTabCloseMenu(Tabs.REVIEW)}>Study Cards</button></div>
+              <div><button className="nav-button" onClick={() => setTabCloseMenu(Tabs.SETTINGS)}>Settings</button></div>
+              <div><button className="nav-button" onClick={() => setTabCloseMenu(Tabs.STATS)}>Statistics</button></div>
+              <div><button className="nav-button" onClick={() => setTabCloseMenu(Tabs.PRONUNCIATION)}>Pronunciation Practice</button></div>
             </div>
           )}
         </span>

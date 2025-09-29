@@ -40,7 +40,7 @@ export default function Settings() {
   return (
   <div>
     <h2>Settings</h2>    
-    <div>
+    <div className="setting">
       <label htmlFor="reviewSpeedDropdown">Review speed:</label>
       <select id="reviewSpeedDropdown" value={speed ? speed : ReviewSpeed.NORMAL} onChange={handleSpeedChange}>
         <option value={ReviewSpeed.SLOW}>Slow</option>
@@ -48,27 +48,27 @@ export default function Settings() {
         <option value={ReviewSpeed.FAST}>Fast</option>
       </select>  
     </div>
-    <div>
+    <div className="setting">
       <label htmlFor="cardFrontLanguageDropdown">Language on card front:</label>
       <select id="cardFrontLanguageDropdown" value={cardFront ? cardFront : CardFrontLanguage.TARGET} onChange={handleCardFrontChange}>
         <option value={CardFrontLanguage.TARGET}>Target language</option>
         <option value={CardFrontLanguage.NATIVE}>Native language</option>
       </select>
     </div>  
-    <div>
+    <div className="setting">
       <label htmlFor="cardOrderDropdown">Card order:</label>
       <select id="cardOrderDropdown" value={cardOrder ? cardOrder : CardOrder.INORDER} onChange={handleCardOrderChange}>
         <option value={CardOrder.INORDER}>In order</option>
         <option value={CardOrder.SHUFFLED}>Shuffled</option>
       </select>  
     </div>
-    <div>
+    <div className="setting">
       <label htmlFor="maxNewSlider">Max new per day:</label>
       <input id="maxNewSlider" type="range" min="0" max="100" step="5" 
           value={maxNew ? maxNew : 10} onChange={handleMaxNewChange} />
       <span>{maxNew ? maxNew : 10}</span>
     </div>
-    <div>
+    <div className="setting">
       <label htmlFor="maxReviewSlider">Max review per day:</label>
       <input id="maxReviewSlider" type="range" min="0" max="200" step="5" 
           value={maxReview ? maxReview : 40} onChange={handleMaxReviewChange} />
